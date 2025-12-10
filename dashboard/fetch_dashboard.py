@@ -22,27 +22,17 @@ SESSION.headers.update(
 )
 
 def api_get(path: str) -> dict:
-    """
-    Helper to call Grafana GET /api/... and return JSON.
-    `path` must start with '/'.
-    """
     url = GRAFANA_URL + path
     resp = SESSION.get(url)
     resp.raise_for_status()
     return resp.json()
 
 def fetch_dashboard_by_uid(uid: str) -> dict:
-    """
-    Fetch full dashboard definition by UID.
-    """
     data = api_get(f"/api/dashboards/uid/{uid}")
     return data["dashboard"]
 
 
 def process_metadata_file(meta_path: Path, output_dir: Path) -> None:
-    """
-    Read a metadata JSON file, fetch the dashboard, and save it.
-    """
     print(f"Processing metadata file: {meta_path}")
 
     with meta_path.open("r", encoding="utf-8") as f:
