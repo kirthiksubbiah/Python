@@ -27,7 +27,7 @@ HEADERS = {
 }
 
 def get_folders():
-    """Fetch all Grafana folders and return name → UID map"""
+   
     url = f"{GRAFANA_URL.rstrip('/')}/api/folders"
     r = requests.get(url, headers=HEADERS, verify=False)
 
@@ -38,7 +38,7 @@ def get_folders():
 
 
 def upload_alert_rule(rule: dict, folder_uid: str):
-    """Upload a single Grafana-managed alert rule"""
+   
     payload = rule.copy()
     payload.pop("folderName")
     payload["folderUID"] = folder_uid
