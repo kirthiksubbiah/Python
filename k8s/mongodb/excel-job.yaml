@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: excel-import
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: importer
+          image: python:3.11-slim
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              pip install pandas pymongo openpyxl
+              python /app/excel_to_mongo.py /data/input.xlsx
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_URI
+            - name: MONGO_DB
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_DB
+            - name: MONGO_COLLECTION
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_COLLECTION
+          volumeMounts:
+            - name: app
+              mountPath: /app
+            - name: excel
+              mountPath: /data
+      volumes:
+        - name: app
+          configMap:
+            name: excel-script
+        - name: excel
+          configMap:
+            name: excel-data
+
