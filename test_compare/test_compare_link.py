@@ -31,10 +31,10 @@ def print_links(title: str, links: dict[str, str], page: Page):
         absolute_url = urljoin(BASE, link)
         response = page.request.get(absolute_url, max_redirects=5, timeout=30000)
 
-        print(f"  - {name}")
-        print(f"      URL      : {absolute_url}")
-        print(f"      STATUS   : {response.status}")
-        print(f"      REDIRECT : {response.url}")
+        print(f"  - Request Type : {name}")
+        print(f"      STATUS     : {response.status}")
+        print(f"      REDIRECT   : {response.url}")
+
 
 def print_diff(prod: dict, dev: dict):
     prod_keys = set(prod)
